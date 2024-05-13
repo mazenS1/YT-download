@@ -6,16 +6,15 @@ from pytube import Playlist
 import time
 
 # Function to download YouTube video
-def download_video(url):
+def download_video(url, download_path):
     try:
         # Create a YouTube object
         video = YouTube(url)
-
+        # Check if the download path exists, if not, create it
+        if not os.path.exists(download_path):
+            os.makedirs(download_path)
         # Get the highest resolution video stream
         stream = video.streams.get_highest_resolution()
-
-        # Set the download path to the desktop
-        download_path = os.path.join(os.path.expanduser("~"), "Desktop")
 
         # Download the video to the desktop
         stream.download(download_path)
@@ -93,6 +92,27 @@ def download_playlist(playlist_url, download_path):
     except Exception as e:
         print("Error:", str(e))
 
-playlist_url = input("Enter the YouTube playlist URL: ")
-download_playlist_auto(playlist_url, os.path.join(os.path.expanduser("~"), "Desktop"))
+while True:
+    print("1. Download a single video")
+    print("2. Download a playlist")
+    print("3. Download a playlist automatically")
+    print("4. Exit")
+    choice = input("Enter your choice: ")
+
+    if choice == "1":
+        url = input("Enter the YouTube video URL: ")
+        download_path = input("Enter the download path: ")
+        download_video(url, download_path)
+    elif choice == "2":
+        playlist_url = input("Enter the YouTube playlist URL: ")
+        download_path = input("Enter the download path: ")
+        download_playlist(playlist_url, download_path)
+    elif choice == "3":
+        playlist_url = input("Enter the YouTube playlist URL: ")
+        download_path = input("Enter the download path: ")
+        download_playlist_auto(playlist_url, download_path)
+    elif choice == "4":
+        break
+    else:
+        print("Invalid choice! Please try again.")
 
